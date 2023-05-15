@@ -51,12 +51,14 @@ export async function getEvent(req, res) {
 
 export async function updateEvent(req, res) {
   try {
-    const id = req.body.id;
-    delete req.body.id;
+   // const id = req.body.id;
+   // delete req.body.id;
     const data = req.body;
-    const event = await db.collection("events").doc(id).update();
+    const eventRef =  db.collection("events").doc(data.id);
+
+      await  eventRef.update(data);
     
-    return res.status(500).send({status: "success", msg: "data updated"})
+    return res.status(200).send({status: "success", msg: "data updated"})
  
   } catch (error) {
      return res.status(500).send({status: 'failed',masg: {erro}})
@@ -66,11 +68,11 @@ export async function updateEvent(req, res) {
 
 export async function deleteEvent(req, res){
 try {
-   const id = req.bodyu.id;
-   const Event =  db.collection("events");
-   await Event.doc(id).delete();
+   const id = req.params.id
+   const EventRef =  db.collection("events").doc(id);
+   await EventRef.delete();
 
-   return res.status(200).send({status: "success", msg: {error}})
+   return res.status(200).send({status: "success", msg: "event deleted"})
 } catch (error) {
     return res.status(500).send({status: 'failed', msg: {error }})
 }
